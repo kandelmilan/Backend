@@ -1,0 +1,16 @@
+Package
+
+nodemon 
+npm i nodemon
+
+for express js 
+npm i express
+
+
+for mongooses 
+npm i mongoose
+
+
+dotenv npm
+
+npm i dotenv
