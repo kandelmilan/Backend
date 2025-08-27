@@ -1,10 +1,18 @@
-const { default: mongoose } = require("mongoose");
+const mongoose = require("mongoose");
+const app=require("./app")
+const dotenv=require("dotenv")
+dotenv.config({quite:true})
+const port=process.env.PORT
+mongoose.connect(process.env.MONGODB_URL).then(
+    () => {
+        console.log("Database connection succesful")
 
-const mongoose=require(mongoose)
-
-
-mongoose.connect("mongodb://127.0.0.1:27017/E-commerce(Backend)").then(
-    ()=>{
-        console.log("db connection ok ")
+        app.listen(port, () => {
+            console.log(`Server is serving at port ${port}`)
+        })
     }
-).catch()
+).catch(
+    (err) => {
+        console.log(err)
+    }
+)
