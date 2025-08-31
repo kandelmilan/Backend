@@ -14,3 +14,8 @@ npm i mongoose
 dotenv npm
 
 npm i dotenv
+
+
+npm joi  this is a schema used for validation 
+
+npm i joi
