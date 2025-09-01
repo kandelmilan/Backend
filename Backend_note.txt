@@ -19,3 +19,15 @@ npm i dotenv
 npm joi  this is a schema used for validation 
 
 npm i joi
+
+
+bcrypt
+https://www.npmjs.com/package/bcrypt
+
+npm i bcrypt
+
+
+npm jsonwebtoken 
+https://www.npmjs.com/package/jsonwebtoken
+
+npm i jsonwebtoken

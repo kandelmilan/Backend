@@ -1,5 +1,6 @@
 const User = require("../model/User.model")
 const Joi = require("joi")
+const bcrypt = require("bcrypt")
 
 
 const signupSchema = Joi.object({
@@ -29,7 +30,7 @@ const signupSchema = Joi.object({
         .messages({
             "string.empty": "Password is required",
             "string.min": "Password must be at least 6 characters",
-            "string.pattern.base": "Password must contain at least one uppercase letter, one lowercase letter, and one number"
+            // "string.pattern.base": "Password must contain at least one uppercase letter, one lowercase letter, and one number"
         }),
 
     role: Joi.string()
@@ -41,22 +42,56 @@ const signupSchema = Joi.object({
 });
 
 
+
+const loginSchema = Joi.object({
+    email: Joi.string()
+        .email()
+        .required()
+        .messages({
+            "string.empty": "Email is required",
+            "string.email": "Invalid email format"
+        }),
+
+    password: Joi.string()
+        .min(6)
+        .max(100)
+        // .pattern(new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$"))
+        .required()
+        .messages({
+            "string.empty": "Password is required",
+            "string.min": "Password must be at least 6 characters",
+            "string.pattern.base": "Password must contain at least one uppercase letter, one lowercase letter, and one number"
+        }),
+})
+
 const login = async (req, res) => {
-    console.log(req.body)
+    
+    try{
+        // const loginData=req.body
+        // const {error,value}=loginSchema.validate(loginData)
+        // const user=await User.findOne({email:value.email})
+
+    }catch(err){
+
+    }
 }
 
 
 const signup = async (req, res) => {
     const data = req.body
     try {
-        const { error, value } = signupSchema.validate(data,{
-            allowUnknown:true,
-            abortEarly:false
+        const { error, value } = signupSchema.validate(data, {
+            allowUnknown: true,
+            abortEarly: false
         })
         if (!error) {
-            // do not store password in plain text
-            const user = await User.create(value)
-            res.status(200).send(user)// fix me: do not send user with password
+            let saltRounds=10
+            const hash=bcrypt.hashSync(value.password,saltRounds)
+            const user = await User.create({...value,password:hash})
+            let userObject=user.toObject()
+            delete userObject.password
+            console.log(userObject)
+            res.status(200).send(userObject)// fix me: do not send user with password
 
         } else {
             throw error
