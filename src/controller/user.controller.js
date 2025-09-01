@@ -1,7 +1,7 @@
 const User = require("../model/User.model")
 const Joi = require("joi")
 const bcrypt = require("bcrypt")
-
+const jwt=require("jsonwebtoken")
 
 const signupSchema = Joi.object({
     username: Joi.string()
@@ -67,12 +67,28 @@ const loginSchema = Joi.object({
 const login = async (req, res) => {
     
     try{
-        // const loginData=req.body
-        // const {error,value}=loginSchema.validate(loginData)
-        // const user=await User.findOne({email:value.email})
+        const loginData=req.body
+        const {error,value}=loginSchema.validate(loginData)
+        const user=await User.findOne({email:value.email})
+        if(!user){
+            res.status(200).send({message:"wrong Input"})
+            return
+        }
+       const matched = await bcrypt.compare(value.password, user.password)
+
+        if (!matched) {
+            res.status(200).send({ status: "success", message: "Wrong Creditential", data: [] })
+            return
+        } else {
+            const userObject = user.toObject()
+            delete userObject.password
+            const token = jwt.sign(userObject, process.env.JWT_SECRET)
+            res.status(200).send({ status: "sucess", message: "User Logedin successfuly", data: { token, userObject } })
+
+        }
 
     }catch(err){
-
+            console.log(err)
     }
 }
 
