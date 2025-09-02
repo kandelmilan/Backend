@@ -1,6 +1,13 @@
 Package
 
-nodemon 
+1.express 
+npm install express
+npm i express
+
+2.dotenv (for DatabaseConnection)
+    npm i dotenv
+
+3.nodemon                       important 
 npm i nodemon
 
 for express js 
@@ -31,3 +38,6 @@ npm jsonwebtoken
 https://www.npmjs.com/package/jsonwebtoken
 
 npm i jsonwebtoken
+
+
+passport js---package

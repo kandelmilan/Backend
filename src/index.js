@@ -1,8 +1,9 @@
 const mongoose = require("mongoose");
-const app=require("./app")
-const dotenv=require("dotenv")
-dotenv.config({quite:true})
-const port=process.env.PORT
+const app = require("./app")
+const dotenv = require("dotenv")
+dotenv.config({ quite: true })
+const port = process.env.PORT
+
 mongoose.connect(process.env.MONGODB_URL).then(
     () => {
         console.log("Database connection succesful")
