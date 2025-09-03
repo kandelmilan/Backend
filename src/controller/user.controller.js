@@ -1,7 +1,7 @@
 const User = require("../model/User.model")
 const Joi = require("joi")
 const bcrypt = require("bcrypt")
-const jwt=require("jsonwebtoken")
+const jwt = require("jsonwebtoken")
 
 const signupSchema = Joi.object({
     username: Joi.string()
@@ -65,16 +65,17 @@ const loginSchema = Joi.object({
 })
 
 const login = async (req, res) => {
-    
-    try{
-        const loginData=req.body
-        const {error,value}=loginSchema.validate(loginData)
-        const user=await User.findOne({email:value.email})
-        if(!user){
-            res.status(200).send({message:"wrong Input"})
+
+    try {
+        const loginData = req.body
+        const { error, value } = loginSchema.validate(loginData)
+        const user = await User.findOne({ email: value.email })
+        if (!user) {
+            res.status(200).send({ message: "wrong Input" })
+
             return
         }
-       const matched = await bcrypt.compare(value.password, user.password)
+        const matched = await bcrypt.compare(value.password, user.password)
 
         if (!matched) {
             res.status(200).send({ status: "success", message: "Wrong Creditential", data: [] })
@@ -87,8 +88,8 @@ const login = async (req, res) => {
 
         }
 
-    }catch(err){
-            console.log(err)
+    } catch (err) {
+        console.log(err)
     }
 }
 
@@ -102,13 +103,13 @@ const signup = async (req, res) => {
             abortEarly: false
         })
         if (!error) {
-            let saltRounds=10
-            const hash=bcrypt.hashSync(value.password,saltRounds)
-            const user = await User.create({...value,password:hash})
-            let userObject=user.toObject()
+            let saltRounds = 10
+            const hash = bcrypt.hashSync(value.password, saltRounds)
+            const user = await User.create({ ...value, password: hash })
+            let userObject = user.toObject()
             delete userObject.password
             console.log(userObject)
-            res.status(200).send(userObject)// fix me: do not send user with password
+            res.status(200).send(userObject)
 
         } else {
             throw error
